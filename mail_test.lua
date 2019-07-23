@@ -89,17 +89,9 @@ local function delete_method(req)
 	end
 end
 
-local function print_method()
-	for i, j in pairs(box.space.mail_test_data:select{}) do
-		print (i, j)
-	end
-	print ()
-end
-
 local server = require('http.server').new(nil, 8080)
 server:route({ path = '/mailtest', method = 'POST' }, post_method)
 server:route({ path = '/mailtest/:id', method = 'GET' }, get_method)
 server:route({ path = '/mailtest/:id', method = 'PUT' }, put_method)
 server:route({ path = '/mailtest/:id', method = 'DELETE' }, delete_method)
-server:route({ path = '/mailtest/', method = 'PRINT' }, print_method)
 server:start()
