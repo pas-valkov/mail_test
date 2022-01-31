@@ -9,7 +9,7 @@ Config = {
 
 --server
     port = 8080,
-    request_limit = 3000, --per second
+    request_limit = 100, --per second
     storage_name = "mail_test"
 }
 

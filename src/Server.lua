@@ -1,5 +1,5 @@
 fio = require('fio')
---queue = require('TimeQueue')
+queue = require('TimeQueue')
 http_server = require('http.server')
 
 local Server = {
@@ -13,7 +13,7 @@ Server.__index = Server
 
 function Server:new(config)
     Server.storage_name = config.storage_name
-    --Server.queue = queue(config.request_limit)
+    Server.queue = queue(config.request_limit)
 
     local self = setmetatable(http_server.new(nil, config.port), Server)
 
@@ -55,7 +55,9 @@ function Server:prepare_config(config) -- todo make it private
 end
 
 function Server.post_method(req)
-    --Server.queue.push(os.time())
+    if (not Server.queue.push(os.time())) then
+        return { status = 429 }
+    end
 
     body_exists, body = pcall(json_body_handler, req)
 
@@ -80,7 +82,9 @@ function Server.post_method(req)
 end
 
 function Server.get_method(req)
-    --Server.queue.push(os.time())
+    if (not Server.queue.push(os.time())) then
+        return { status = 429 }
+    end
 
     local id = req:stash('id') 
     local obj = box.space[Server.storage_name]:get(id)
@@ -92,7 +96,9 @@ function Server.get_method(req)
 end
 
 function Server.put_method(req)
-    --Server.queue.push(os.time())
+    if (not Server.queue.push(os.time())) then
+        return { status = 429 }
+    end
 
     body_exists, body = pcall(json_body_handler, req)
     if (not body_exists) then
@@ -112,7 +118,9 @@ function Server.put_method(req)
 end
 
 function Server.delete_method(req)
-    --Server.queue.push(os.time())
+    if (not Server.queue.push(os.time())) then
+        return { status = 429 }
+    end
 
     local id = req:stash('id')
     local obj = box.space[Server.storage_name]:delete(id)

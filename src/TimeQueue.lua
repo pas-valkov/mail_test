@@ -4,28 +4,27 @@ function time_queue(len_lim)
         out.len_lim = len_lim or 5000
         
         out.len = function()
-            return (last-first+1)
+            return last - first + 1
         end
 
         out.pop = function()
-            if first <= last then
+            if (first <= last) then
                 local value = out[first]
                 out[first] = nil
                 first = first + 1
-                print("Poped", value)
+                --print("Poped", value)
             end
         end
 
         out.push = function(item)
---            print("Come", item)
-            if out:len() < len_lim then
+            if (out:len() < len_lim) then
                 last = last + 1
                 out[last] = item
-                print("Pushed", item)
+                --print("Pushed", item)
                 return true
             else
-                if item - out[last] < 1 then
-                    print("Skiped", item)
+                if (item - out[first] < 1) then
+                    --print("Skiped", item)
                     return false
                 else
                     out:pop()
