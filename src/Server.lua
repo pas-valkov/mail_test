@@ -78,8 +78,8 @@ function Server.post_method(req) --todo use self not Server
 
     local json_key = body[Server.req_fields.key]
     local json_value = body[Server.req_fields.value]
-    
-    if (json_key == nil or json_value == nil) then
+
+    if (type(json_key) ~= "string" or json_value == nil) then
         logger.debug("POST [Status: %s]", Codes.BODY_ERROR)
         return { status = Codes.BODY_ERROR }
     end
